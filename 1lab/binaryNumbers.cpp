@@ -147,41 +147,35 @@ void printBinary(const vector<int>& binary) {
 	for (int bit : binary) {
 		cout << bit;
 	}
-	cout << endl;
-}
-void printBinaryy2(const vector<int>& binary) {
-	for (int bit : binary) {
-		cout << bit;
-	}
 }
 vector<int> addBinary(const vector<int>& aInt, const vector<int>& aFrac, const vector<int>& bInt, const vector<int>& bFrac, int aFracSize, int bFracSize) {
 	vector<int> result;
 	int carry = 0;
 	int maxSizeFrac = max(aFracSize, bFracSize);
-	vector<int> tempAFrac(maxSizeFrac, 0);
-	vector<int> tempBFrac(maxSizeFrac, 0);
+	vector<int> forSumAFrac(maxSizeFrac, 0);
+	vector<int> forSumBFrac(maxSizeFrac, 0);
 	for (int i = aFrac.size() - 1, j = maxSizeFrac - 1; i >= 0; --i, --j) {
-		tempAFrac[j] = aFrac[i];
+		forSumAFrac[j] = aFrac[i];
 	}
 	for (int i = bFrac.size() - 1, j = maxSizeFrac - 1; i >= 0; --i, --j) {
-		tempBFrac[j] = bFrac[i];
+		forSumBFrac[j] = bFrac[i];
 	}
 	for (int i = maxSizeFrac - 1; i >= 0; --i) {
-		int sum = tempAFrac[i] + tempBFrac[i] + carry;
+		int sum = forSumAFrac[i] + forSumBFrac[i] + carry;
 		result.insert(result.begin(), sum % 2);
 		carry = sum / 2;
 	}
-	int maxSizeInt = max(aInt.size(), bInt.size()) + 1; 
-	vector<int> tempAInt(maxSizeInt, 0);
-	vector<int> tempBInt(maxSizeInt, 0);
+	int maxSizeInt = max(aInt.size(), bInt.size()) + 1;
+	vector<int> forSumAInt(maxSizeInt, 0);
+	vector<int> forSumBInt(maxSizeInt, 0);
 	for (int i = aInt.size() - 1, j = maxSizeInt - 1; i >= 0; --i, --j) {
-		tempAInt[j] = aInt[i];
+		forSumAInt[j] = aInt[i];
 	}
 	for (int i = bInt.size() - 1, j = maxSizeInt - 1; i >= 0; --i, --j) {
-		tempBInt[j] = bInt[i];
+		forSumBInt[j] = bInt[i];
 	}
 	for (int i = maxSizeInt - 1; i >= 0; --i) {
-		int sum = tempAInt[i] + tempBInt[i] + carry;
+		int sum = forSumAInt[i] + forSumBInt[i] + carry;
 		result.insert(result.begin(), sum % 2);
 		carry = sum / 2;
 	}
@@ -202,7 +196,7 @@ pair<vector<int>, vector<int>> doubleToBinary(double number) {
 		intBinary.insert(intBinary.begin(), intPart % 2);
 		intPart /= 2;
 	}
-	int precision = 3; 
+	int precision = 3;
 	for (int i = 0; i < precision; ++i) {
 		fracPart *= 2;
 		int digit = static_cast<int>(fracPart);
@@ -233,14 +227,14 @@ void printBinaryy(const vector<int>& binary) {
 			cout << binary[i];
 			if (isFractionalPart) {
 				fractionDigits++;
-				if (fractionDigits == 8) 
+				if (fractionDigits == 8)
 					break;
 			}
 		}
 	}
-		while (fractionDigits < 8) {
-			cout << "0";
-			fractionDigits++;
-		}
+	while (fractionDigits < 8) {
+		cout << "0";
+		fractionDigits++;
+	}
 	cout << endl;
 }
