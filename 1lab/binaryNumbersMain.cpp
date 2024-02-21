@@ -80,8 +80,8 @@ int main() {
 	vector<int> quotient_binary2 = divideBinary(BinaryNumber3, BinaryNumber12, precision);
 	vector<int> quotient_binary3 = divideBinary(BinaryNumber7, BinaryNumber4, precision);
 	vector<int> quotient_binary4 = divideBinary(BinaryNumber7, BinaryNumber10, precision);
-	double num1 = 4.625;
-	double num2 = 3.5;
+	double num1 = 13.100;
+	double num2 = 21.101;
 	pair<vector<int>, vector<int>> binaryy1 = doubleToBinary(num1);
 	pair<vector<int>, vector<int>> binaryy2 = doubleToBinary(num2);
 	vector<int> summ1 = addBinary(binaryy1.first, binaryy1.second, binaryy2.first, binaryy2.second, binaryy1.second.size(), binaryy2.second.size());
