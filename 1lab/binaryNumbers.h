@@ -19,5 +19,3 @@ vector<int> divideBinary(vector<int> dividend, vector<int> divisor, int precisio
 void printBinary(const vector<int>& binary);
 vector<int> addBinary(const vector<int>& aInt, const vector<int>& aFrac, const vector<int>& bInt, const vector<int>& bFrac, int aFracSize, int bFracSize);
 pair<vector<int>, vector<int>> doubleToBinary(double number);
-void printBinaryy(const vector<int>& binary);
-void printBinaryy2(const vector<int>& binary);
