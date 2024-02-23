@@ -135,9 +135,9 @@ vector<int> divideBinary(vector<int> dividend, vector<int> divisor, int precisio
 	for (int i = 0; i < precision; ++i) {
 		int carry = 0;
 		for (size_t j = 0; j < remainder.size(); ++j) {
-			int temp = carry * 2 + remainder[j];
-			remainder[j] = temp / 2;
-			carry = temp % 2;
+			int storage = carry * 2 + remainder[j];
+			remainder[j] = storage / 2;
+			carry = storage % 2;
 		}
 		quotient.push_back(carry);
 	}
