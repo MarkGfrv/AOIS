@@ -30,8 +30,8 @@ namespace MyTests
         }
         TEST_METHOD(AdditionTest)
         {
-            Assert::IsTrue(addition({ 0, 1, 1, 0, 1 }, { 0, 1, 0, 1, 0, 1 }) == vector<int>{1, 0, 1, 1, 1});
-            Assert::IsTrue(addition({ 1, 1, 1, 0, 1 }, { 1, 1, 0, 1, 0, 1 }) == vector<int>{1, 1, 0, 1, 1, 1});
+            Assert::IsTrue(addition({ 0, 1, 1, 0, 1 }, { 0, 1, 0, 1, 0, 1 }) == vector<int>{1, 0, 0, 0, 1, 0});
+            Assert::IsTrue(addition({ 1, 0, 0, 1, 1 }, { 1, 0, 1, 0, 1, 1 }) == vector<int>{1, 1, 1, 1, 1, 0});
         }
 
         TEST_METHOD(SubtractionTest)
@@ -75,24 +75,16 @@ namespace MyTests
         }
         TEST_METHOD(TestAddBinary)
         {
-            // Подготовка входных данных
-            vector<int> aInt = { 1, 0, 0 }; // 4 в двоичной системе
-            vector<int> aFrac = { 1, 0, 1 }; // 0.625 в двоичной системе
-            int aFracSize = 3;
+            vector<int> binaryNum1 = { 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1 }; 
+            vector<int> binaryNum2 = { 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1 };
 
-            vector<int> bInt = { 1, 1 }; // 3 в двоичной системе
-            vector<int> bFrac = { 1, 0, 0 }; // 0.5 в двоичной системе
-            int bFracSize = 1;
+            vector<int> expected = { 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0 }; 
 
-            // Ожидаемый результат
-            vector<int> expected = { 1, 0, 0, 0, 1, 0, 0, 1 }; // 7.125 в двоичной системе
+           
+            vector<int> result = addBinary(binaryNum1, binaryNum2);
 
-            // Вызываем функцию addBinary
-            vector<int> result = addBinary(aInt, aFrac, bInt, bFrac, aFracSize, bFracSize);
-
-            // Проверяем, совпадают ли результаты с ожидаемыми
+            
             Assert::IsTrue(expected == result);
         }
     };
 }
-
