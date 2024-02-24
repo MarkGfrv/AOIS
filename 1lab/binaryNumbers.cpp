@@ -53,14 +53,18 @@ vector<int> convertDop(int Number) {
 vector<int> addition(const vector<int>& firstNumber, const vector<int>& secondNumber) {
 	vector<int> result;
 	int carry = 0;
-	for (int i = firstNumber.size() - 1; i >= 0; --i) {
-		int sum = firstNumber[i] + secondNumber[i] + carry;
+	int maxLength = max(firstNumber.size(), secondNumber.size());
+
+	for (int i = 0; i < maxLength; ++i) {
+		int bit1 = (i < firstNumber.size()) ? firstNumber[firstNumber.size() - 1 - i] : 0;
+		int bit2 = (i < secondNumber.size()) ? secondNumber[secondNumber.size() - 1 - i] : 0;
+		int sum = bit1 + bit2 + carry;
 		result.insert(result.begin(), sum % 2);
 		carry = sum / 2;
 	}
-	if (carry > 0) {
+	if (carry)
 		result.insert(result.begin(), carry);
-	}
+
 	return result;
 }
 vector<int> substraction(const vector<int>& firstNumber, const vector<int>& secondNumber) {
@@ -135,9 +139,9 @@ vector<int> divideBinary(vector<int> dividend, vector<int> divisor, int precisio
 	for (int i = 0; i < precision; ++i) {
 		int carry = 0;
 		for (size_t j = 0; j < remainder.size(); ++j) {
-			int storage = carry * 2 + remainder[j];
-			remainder[j] = storage / 2;
-			carry = storage % 2;
+			int source = carry * 2 + remainder[j];
+			remainder[j] = source / 2;
+			carry = source % 2;
 		}
 		quotient.push_back(carry);
 	}
@@ -148,93 +152,53 @@ void printBinary(const vector<int>& binary) {
 		cout << bit;
 	}
 }
-vector<int> addBinary(const vector<int>& aInt, const vector<int>& aFrac, const vector<int>& bInt, const vector<int>& bFrac, int aFracSize, int bFracSize) {
-	vector<int> result;
+vector<int> addBinary(vector<int> num1, vector<int> num2) {
+	vector<int> result(32, 0);
 	int carry = 0;
-	int maxSizeFrac = max(aFracSize, bFracSize);
-	vector<int> forSumAFrac(maxSizeFrac, 0);
-	vector<int> forSumBFrac(maxSizeFrac, 0);
-	for (int i = aFrac.size() - 1, j = maxSizeFrac - 1; i >= 0; --i, --j) {
-		forSumAFrac[j] = aFrac[i];
+
+	for (int i = 31; i >= 0; i--) {
+		int bitSum = num1[i] + num2[i] + carry;
+		result[i] = bitSum % 2;
+		carry = bitSum / 2;
 	}
-	for (int i = bFrac.size() - 1, j = maxSizeFrac - 1; i >= 0; --i, --j) {
-		forSumBFrac[j] = bFrac[i];
-	}
-	for (int i = maxSizeFrac - 1; i >= 0; --i) {
-		int sum = forSumAFrac[i] + forSumBFrac[i] + carry;
-		result.insert(result.begin(), sum % 2);
-		carry = sum / 2;
-	}
-	int maxSizeInt = max(aInt.size(), bInt.size()) + 1;
-	vector<int> forSumAInt(maxSizeInt, 0);
-	vector<int> forSumBInt(maxSizeInt, 0);
-	for (int i = aInt.size() - 1, j = maxSizeInt - 1; i >= 0; --i, --j) {
-		forSumAInt[j] = aInt[i];
-	}
-	for (int i = bInt.size() - 1, j = maxSizeInt - 1; i >= 0; --i, --j) {
-		forSumBInt[j] = bInt[i];
-	}
-	for (int i = maxSizeInt - 1; i >= 0; --i) {
-		int sum = forSumAInt[i] + forSumBInt[i] + carry;
-		result.insert(result.begin(), sum % 2);
-		carry = sum / 2;
-	}
-	if (carry) {
-		result.insert(result.begin(), carry);
-	}
-	int pointPos = aFracSize > bFracSize ? aFracSize : bFracSize;
-	result.insert(result.end() - pointPos, 1);
 
 	return result;
 }
-pair<vector<int>, vector<int>> doubleToBinary(double number) {
-	int intPart = static_cast<int>(number);
-	double fracPart = number - intPart;
-	vector<int> intBinary;
-	vector<int> fracBinary;
-	while (intPart > 0) {
-		intBinary.insert(intBinary.begin(), intPart % 2);
-		intPart /= 2;
-	}
-	int precision = 3;
-	for (int i = 0; i < precision; ++i) {
-		fracPart *= 2;
-		int digit = static_cast<int>(fracPart);
-		fracBinary.push_back(digit);
-		fracPart -= digit;
-	}
-	return make_pair(intBinary, fracBinary);
-}
+vector<int> doubleToBinary(double num) {
+	vector<int> binary;
+	int sign = (num >= 0) ? 0 : 1;
+	num = fabs(num);
+	int exponent = 0;
 
-
-void printBinaryy(const vector<int>& binary) {
-	bool isFractionalPart = false;
-	int fractionDigits = 0;
-	int pointIndex = -1;
-	for (int i = 0; i < binary.size(); ++i) {
-		if (binary[i] == -1) {
-			pointIndex = i;
-			break;
+	if (num >= 1) {
+		while (num >= 2) {
+			num /= 2;
+			exponent++;
 		}
 	}
-
-	for (int i = 0; i < binary.size(); ++i) {
-		if (binary[i] == -1) {
-			cout << ".";
-			isFractionalPart = true;
+	else {
+		while (num < 1) {
+			num *= 2;
+			exponent--;
+		}
+	}
+	exponent += 127; 
+	double mantissa = num - 1.0;
+	binary.push_back(sign);
+	for (int i = 7; i >= 0; i--) {
+		binary.push_back((exponent >> i) & 1);
+	}
+	for (int i = 0; i < 23; i++) {
+		mantissa *= 2;
+		if (mantissa >= 1) {
+			binary.push_back(1);
+			mantissa -= 1;
 		}
 		else {
-			cout << binary[i];
-			if (isFractionalPart) {
-				fractionDigits++;
-				if (fractionDigits == 8)
-					break;
-			}
+			binary.push_back(0);
 		}
 	}
-	while (fractionDigits < 8) {
-		cout << "0";
-		fractionDigits++;
-	}
-	cout << endl;
+	return binary;
 }
+
+
