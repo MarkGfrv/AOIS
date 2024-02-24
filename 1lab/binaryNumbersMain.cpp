@@ -82,12 +82,9 @@ int main() {
 	vector<int> quotient_binary4 = divideBinary(BinaryNumber7, BinaryNumber10, precision);
 	double num1 = 13.100;
 	double num2 = 21.101;
-	pair<vector<int>, vector<int>> binaryy1 = doubleToBinary(num1);
-	pair<vector<int>, vector<int>> binaryy2 = doubleToBinary(num2);
-	vector<int> summ1 = addBinary(binaryy1.first, binaryy1.second, binaryy2.first, binaryy2.second, binaryy1.second.size(), binaryy2.second.size());
-	int pointPos1 = binaryy1.second.size() > binaryy2.second.size() ? binaryy1.second.size() : binaryy2.second.size();
-	int pos1 = summ1.size() - pointPos1 - 1;
-
+	vector<int> binaryy1 = doubleToBinary(num1);
+	vector<int> binaryy2 = doubleToBinary(num2);
+	vector<int> summ1 = addBinary(binaryy1, binaryy2);
 	do {
 		std::cout << "1. Сумма чисел\n"
 			<< "2. Разность чисел\n"
@@ -193,21 +190,13 @@ int main() {
 		case 5:
 
 			cout << "Числа " << num1 << " ; " << num2 << " в двоичной системе : \n";
-			printBinary(binaryy1.first);
-			cout << ".";
-			printBinary(binaryy1.second);
+			printBinary(binaryy1);
 			cout << endl;
-			printBinary(binaryy2.first);
-			cout << ".";
-			printBinary(binaryy2.second);
+			printBinary(binaryy2);
 			cout << endl;
 
 			cout << "Сумма чисел " << num1 << " и " << num2 << " в двоичной системе: " << endl;
-			for (int i = 0; i < summ1.size(); ++i) {
-				if (i == pos1)
-					cout << ".";
-				cout << summ1[i];
-			}
+			printBinary(summ1);
 			cout << endl;
 			break;
 		case 6:
