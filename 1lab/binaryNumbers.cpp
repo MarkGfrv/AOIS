@@ -152,18 +152,72 @@ void printBinary(const vector<int>& binary) {
 		cout << bit;
 	}
 }
-vector<int> addBinary(vector<int> num1, vector<int> num2) {
-	vector<int> result(32, 0);
-	int carry = 0;
+vector<int> addBinary(vector<int> binary1, vector<int> binary2) {
+	int sign1 = binary1[0];
+	int sign2 = binary2[0];
+	int exponent1 = 0, exponent2 = 0;
 
-	for (int i = 31; i >= 0; i--) {
-		int bitSum = num1[i] + num2[i] + carry;
-		result[i] = bitSum % 2;
-		carry = bitSum / 2;
+	for (int i = 1; i <= 8; ++i) {
+		exponent1 <<= 1;
+		exponent1 |= binary1[i];
+		exponent2 <<= 1;
+		exponent2 |= binary2[i];
+	}
+
+	exponent1 -= 127;
+	exponent2 -= 127;
+
+	double mantissa1 = 1.0, mantissa2 = 1.0;
+
+	for (int i = 9; i < 32; ++i) {
+		mantissa1 += binary1[i] * pow(0.5, i - 8);
+		mantissa2 += binary2[i] * pow(0.5, i - 8);
+	}
+
+	while (exponent1 > exponent2) {
+		mantissa2 /= 2;
+		++exponent2;
+	}
+	while (exponent2 > exponent1) {
+		mantissa1 /= 2;
+		++exponent1;
+	}
+
+	double sum = mantissa1 + mantissa2;
+
+	if (sum >= 2) {
+		sum /= 2;
+		++exponent1;
+	}
+	std::vector<int> result(32);
+	result[0] = (sum < 0) ? 1 : 0;
+	sum = fabs(sum);
+
+	int intPart = static_cast<int>(sum);
+	double fractionalPart = sum - intPart;
+
+	int index = 8;
+	while (intPart > 0) {
+		result[index--] = intPart % 2;
+		intPart /= 2;
+	}
+
+	index = 9;
+	while (fractionalPart > 0 && index < 32) {
+		fractionalPart *= 2;
+		result[index++] = static_cast<int>(fractionalPart);
+		if (fractionalPart >= 1)
+			fractionalPart -= 1;
+	}
+
+	int exponent = exponent1 + 127;
+	for (int i = 0; i < 8; ++i) {
+		result[i + 1] = (exponent >> (7 - i)) & 1;
 	}
 
 	return result;
 }
+
 vector<int> doubleToBinary(double num) {
 	vector<int> binary;
 	int sign = (num >= 0) ? 0 : 1;
@@ -182,23 +236,26 @@ vector<int> doubleToBinary(double num) {
 			exponent--;
 		}
 	}
-	exponent += 127; 
+	exponent += 127;
+
 	double mantissa = num - 1.0;
-	binary.push_back(sign);
 	for (int i = 7; i >= 0; i--) {
 		binary.push_back((exponent >> i) & 1);
 	}
+
 	for (int i = 0; i < 23; i++) {
 		mantissa *= 2;
+		int bit = static_cast<int>(mantissa);
+		binary.push_back(bit);
 		if (mantissa >= 1) {
-			binary.push_back(1);
-			mantissa -= 1;
-		}
-		else {
-			binary.push_back(0);
+			mantissa -= bit;
 		}
 	}
+
+	binary.insert(binary.begin(), sign);
+
 	return binary;
 }
+
 
 
