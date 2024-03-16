@@ -18,7 +18,7 @@ namespace UnitTest1
             cout.rdbuf(buffer.rdbuf()); 
 
             string expression = "(a | b) & !c";
-            solveExpression(expression);
+            solveLogicalExpression(expression);
 
             string output = buffer.str();
             string expectedOutput = "Variables: a b c \n";
@@ -48,7 +48,7 @@ namespace UnitTest1
             cout.rdbuf(buffer.rdbuf()); 
 
             string expression = "(a -> b) & c";
-            solveExpression(expression);
+            solveLogicalExpression(expression);
 
             string output = buffer.str();
             string expectedOutput = "Variables: a b c \n";
@@ -78,7 +78,7 @@ namespace UnitTest1
             cout.rdbuf(buffer.rdbuf()); 
 
             string expression = "(a ~ b) | c";
-            solveExpression(expression);
+            solveLogicalExpression(expression);
 
             string output = buffer.str();
             string expectedOutput = "Variables: a b c \n";
@@ -108,7 +108,7 @@ namespace UnitTest1
             cout.rdbuf(buffer.rdbuf());
 
             string expression = "(a & b) ~ c";
-            solveExpression(expression);
+            solveLogicalExpression(expression);
 
             string output = buffer.str();
             string expectedOutput = "Variables: a b c \n";
