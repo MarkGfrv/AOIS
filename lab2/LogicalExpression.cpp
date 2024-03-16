@@ -1,5 +1,5 @@
 #include"LogicalExxpresion.h"
-bool evaluateExpression(const vector<bool>& variables, const string& expression) {
+bool evaluateLogicalExpression(const vector<bool>& variables, const string& expression) {
     stack<bool> operandStack;
     stack<char> operatorStack;
 
@@ -188,7 +188,7 @@ void solveExpression(const string& expression) {
             variables[j] = ((i >> (numVariables - j - 1)) & 1) == 1;
         }
 
-        bool result = evaluateExpression(variables, expression);
+        bool result = evaluateLogicalExpression(variables, expression);
         index += to_string(result ? 1 : 0);
 
         for (bool varValue : variables) {
