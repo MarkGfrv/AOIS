@@ -1,8 +1,8 @@
 #include"../Project11/LogicalExxpresion.h"
 int main() {
-    string expression = "(a -> b) | (c & !d)";
+    string expression = "!a -> (!c | b)";
 
-    solveExpression(expression);
+    solveLogicalExpression(expression);
 
     return 0;
 }
