@@ -73,14 +73,14 @@ void calculateSdnfFor2Task(const vector<vector<bool>>& truthTable, const vector<
 }
 vector<string> glueSDNFBy2(vector<string>& sdnfClauses) {
     vector<string> newSdnfClauses;
+    unordered_set<string> mergedClauses;
+
     for (size_t i = 0; i < sdnfClauses.size(); ++i) {
         for (size_t j = i + 1; j < sdnfClauses.size(); ++j) {
             vector<pair<char, bool>> variableStates1;
             vector<pair<char, bool>> variableStates2;
             bool negation1 = false;
             bool negation2 = false;
-
-            // Parse the clauses and extract variable states
             for (char c : sdnfClauses[i]) {
                 if (isalpha(c)) {
                     variableStates1.emplace_back(c, negation1);
@@ -103,10 +103,8 @@ vector<string> glueSDNFBy2(vector<string>& sdnfClauses) {
                     negation2 = false;
                 }
             }
-
-            // Check if both clauses have two identical pairs of variables at the same positions
             int pairCount = 0;
-            bool sameSymbols = true; // Flag to check if remaining variables are same symbols
+            bool sameSymbols = true;
             for (size_t k = 0; k < variableStates1.size(); ++k) {
                 if (variableStates1[k].first == variableStates2[k].first &&
                     variableStates1[k].second == variableStates2[k].second) {
@@ -116,8 +114,7 @@ vector<string> glueSDNFBy2(vector<string>& sdnfClauses) {
                     sameSymbols = false;
                 }
             }
-
-            if (pairCount == 2 && sameSymbols) { // If two identical pairs found and remaining variables have same symbols
+            if (pairCount == 2 && sameSymbols) { 
                 string newClause;
                 for (size_t k = 0; k < variableStates1.size(); ++k) {
                     if (variableStates1[k].first == variableStates2[k].first &&
@@ -131,25 +128,26 @@ vector<string> glueSDNFBy2(vector<string>& sdnfClauses) {
                         newClause += variableStates1[k].first;
                     }
                 }
-                if (!newClause.empty()) { // Ensure the new clause is not empty
+                if (!newClause.empty()) { 
                     newSdnfClauses.push_back("(" + newClause + ")");
+                    mergedClauses.insert(sdnfClauses[i]);
+                    mergedClauses.insert(sdnfClauses[j]);
                 }
             }
         }
     }
-
-    // Remove duplicates
-    unordered_set<string> uniqueClauses;
-    vector<string> uniqueSdnfClauses;
-    for (const auto& clause : newSdnfClauses) {
-        if (uniqueClauses.find(clause) == uniqueClauses.end()) {
-            uniqueClauses.insert(clause);
-            uniqueSdnfClauses.push_back(clause);
+    for (const auto& clause : sdnfClauses) {
+        if (mergedClauses.find(clause) == mergedClauses.end()) {
+            newSdnfClauses.push_back(clause);
         }
     }
+    unordered_set<string> uniqueClauses(newSdnfClauses.begin(), newSdnfClauses.end());
+    newSdnfClauses.assign(uniqueClauses.begin(), uniqueClauses.end());
 
-    return uniqueSdnfClauses;
+    return newSdnfClauses;
 }
+
+
 
 unordered_set<string> extractVariables(const string& clause) {
     unordered_set<string> variables;
@@ -263,8 +261,6 @@ vector<string> mergeSdnf(const vector<string>& sdnfClauses) {
     for (const auto& clause : sdnfClauses) {
         vector<pair<char, bool>> variableStates;
         bool negation = false;
-
-        // Parse the clause and extract variable states
         for (char c : clause) {
             if (isalpha(c)) {
                 variableStates.emplace_back(c, negation);
@@ -276,27 +272,20 @@ vector<string> mergeSdnf(const vector<string>& sdnfClauses) {
                 negation = false;
             }
         }
-
-        // Generate new clauses by combining pairs of variables
         for (size_t i = 0; i < variableStates.size(); ++i) {
             for (size_t j = i + 1; j < variableStates.size(); ++j) {
                 for (size_t k = j + 1; k < variableStates.size(); ++k) {
                     string newClause;
-                    // Append first variable
                     if (variableStates[i].second) {
                         newClause += '!';
                     }
                     newClause += variableStates[i].first;
                     newClause += " & ";
-
-                    // Append second variable
                     if (variableStates[j].second) {
                         newClause += '!';
                     }
                     newClause += variableStates[j].first;
                     newClause += " & ";
-
-                    // Append third variable
                     if (variableStates[k].second) {
                         newClause += '!';
                     }
@@ -306,8 +295,6 @@ vector<string> mergeSdnf(const vector<string>& sdnfClauses) {
             }
         }
     }
-
-    // Remove duplicates
     unordered_map<string, int> clauseCount;
     for (const auto& clause : newSdnfClauses) {
         clauseCount[clause]++;
@@ -500,10 +487,8 @@ void printTable2() {
         {1, 1, 0, 1}
     };
 
-    // Вывод заголовков
     cout << "A   B   C   D     |   E   F   G   H\n";
 
-    // Вывод таблицы
     for (int i = 0; i < 10; ++i) {
         std::cout << inputs[i][0] << "   " << inputs[i][1] << "   " << inputs[i][2] << "   " << inputs[i][3] << "     |   "
             << outputs[i][0] << "   " << outputs[i][1] << "   " << outputs[i][2] << "   " << outputs[i][3] << "\n";
