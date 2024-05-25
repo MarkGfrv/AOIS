@@ -39,7 +39,7 @@ int main() {
         cout << "Введите номер столбца для записи слова:\n";
         cin >> wordWrite;
         cout << "\n";
-        mat.WriteWord(newWord, wordWrite);
+        mat.getWord(newWord, wordWrite);
         cout << "\n";
         cout << "Слово записано в столбец " << wordWrite << "\n";
         break;
@@ -56,7 +56,7 @@ int main() {
         cout << "Введмите номер столбца для записи столбца:\n";
         cin >> rowWrite;
         cout << "\n";
-        mat.WriteAddressRow(newRow, rowWrite);
+        mat.getAddressRow(newRow, rowWrite);
         break;
     case 6:
         cout << "Введите номер первого слова:\n";
@@ -148,7 +148,7 @@ int main() {
             cout << "Введите номер столбца для записи слова:\n";
             cin >> wordWrite;
             cout << "\n";
-            mat.WriteWord(newWord, wordWrite);
+            mat.getWord(newWord, wordWrite);
             cout << "\n";
             cout << "Слово записано в столбец " << wordWrite << "\n";
             break;
@@ -165,7 +165,7 @@ int main() {
             cout << "Введите номер столбца для записи столбца:\n";
             cin >> rowWrite;
             cout << "\n";
-            mat.WriteAddressRow(newRow, rowWrite);
+            mat.getAddressRow(newRow, rowWrite);
             break;
         case 6:
             cout << "Введите номер первого слова:\n";
