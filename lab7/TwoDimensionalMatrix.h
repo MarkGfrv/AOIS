@@ -15,11 +15,11 @@ public:
 
     void PrintMatrix();
 
-    string PrintWord(int wordNumber);
+    string GetWord(int wordNumber);
 
     void WriteWord(string word, int wordNumber);
 
-    string PrintAddressRow(int wordNumber);
+    string GetAddressRow(int wordNumber);
 
     void WriteAddressRow(string row, int wordNumber);
 
