@@ -14,7 +14,7 @@ void Matrix::PrintMatrix() {
         cout << endl;
     }
 }
-string Matrix::PrintWord(int wordNumber) {
+string Matrix::GetWord(int wordNumber) {
     string word;
     int firstNumber = matrix[wordNumber][wordNumber];
     word += to_string(firstNumber);
@@ -59,7 +59,7 @@ void Matrix::WriteWord(string word, int wordNumber) {
             break;
     }
 }
-string Matrix::PrintAddressRow(int wordNumber) {
+string Matrix::GetAddressRow(int wordNumber) {
     string row;
     for (int i = 0; i < 16 - wordNumber; i++) {
         row += to_string(matrix[wordNumber + i][i]);
